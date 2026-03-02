@@ -104,7 +104,7 @@ export class DashboardService {
     transactions
       .filter((tx) => tx.type === 'EXPENSE')
       .forEach((tx) => {
-        const category = tx.category || 'Uncategorized';
+        const category = tx.category || 'Sem categoria';
 
         if (!breakdown[category]) {
           breakdown[category] = {
@@ -245,8 +245,8 @@ export class DashboardService {
     if (category.length > 0) {
       insights.push({
         type: 'TOP_CATEGORY',
-        title: 'Top Spending Category',
-        message: `${category[0].name} is your highest spending category this month`,
+        title: 'Categoria com maior gasto',
+        message: `${category[0].name} foi sua categoria de maior gasto neste mês`,
         value: category[0].amount,
         percentage: category[0].percentage,
       });
@@ -260,8 +260,8 @@ export class DashboardService {
     if (overdue.length > 0) {
       insights.push({
         type: 'OVERDUE_BILLS',
-        title: 'Overdue Bills',
-        message: `You have ${overdue.length} overdue bill(s)`,
+        title: 'Contas em atraso',
+        message: `Você tem ${overdue.length} conta(s) em atraso`,
       });
     }
 
@@ -270,8 +270,8 @@ export class DashboardService {
     if (nearGoal.length > 0) {
       insights.push({
         type: 'POTS_NEAR_GOAL',
-        title: 'Savings Goal Progress',
-        message: `You have ${nearGoal.length} pot(s) near or completed their goal`,
+        title: 'Progresso das metas',
+        message: `Você tem ${nearGoal.length} cofre(s) perto ou com a meta concluída`,
       });
     }
 
@@ -280,7 +280,7 @@ export class DashboardService {
     if (totalSaved > 0) {
       insights.push({
         type: 'TOTAL_SAVINGS',
-        title: 'Total Saved',
+        title: 'Total guardado',
         value: totalSaved,
       });
     }

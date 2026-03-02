@@ -1,29 +1,29 @@
 <div class="overview">
   <!-- Header -->
   <div class="overview-header">
-    <h1>Dashboard</h1>
+    <h1>Visão geral</h1>
 
     <div class="overview-month-selector">
       <select [value]="selectedMonth()" (change)="onMonthChange($event)">
-        <option value="1">January</option>
-        <option value="2">February</option>
-        <option value="3">March</option>
-        <option value="4">April</option>
-        <option value="5">May</option>
-        <option value="6">June</option>
-        <option value="7">July</option>
-        <option value="8">August</option>
-        <option value="9">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
+        <option value="1">Janeiro</option>
+        <option value="2">Fevereiro</option>
+        <option value="3">Março</option>
+        <option value="4">Abril</option>
+        <option value="5">Maio</option>
+        <option value="6">Junho</option>
+        <option value="7">Julho</option>
+        <option value="8">Agosto</option>
+        <option value="9">Setembro</option>
+        <option value="10">Outubro</option>
+        <option value="11">Novembro</option>
+        <option value="12">Dezembro</option>
       </select>
     </div>
   </div>
 
   @if (loading()) {
     <div class="overview-loading">
-      <p>Loading dashboard...</p>
+      <p>Carregando painel...</p>
     </div>
   } @else {
     <div class="overview-content">
@@ -34,7 +34,7 @@
             <span class="material-icons">trending_up</span>
           </div>
           <div class="summary-card__content">
-            <p class="summary-card__label">Income</p>
+            <p class="summary-card__label">Receitas</p>
             <p class="summary-card__value">
               {{ dashboardData().summary?.totalIncome | currency }}
             </p>
@@ -46,7 +46,7 @@
             <span class="material-icons">trending_down</span>
           </div>
           <div class="summary-card__content">
-            <p class="summary-card__label">Expenses</p>
+            <p class="summary-card__label">Despesas</p>
             <p class="summary-card__value">
               {{ dashboardData().summary?.totalExpense | currency }}
             </p>
@@ -58,7 +58,7 @@
             <span class="material-icons">wallet</span>
           </div>
           <div class="summary-card__content">
-            <p class="summary-card__label">Balance</p>
+            <p class="summary-card__label">Saldo</p>
             <p class="summary-card__value" [class.negative]="dashboardData().summary?.balance < 0">
               {{ dashboardData().summary?.balance | currency }}
             </p>
@@ -69,7 +69,7 @@
       <!-- Insights -->
       @if (dashboardData().insights?.length > 0) {
         <section class="overview-insights">
-          <h2>Insights</h2>
+          <h2>Percepções</h2>
 
           <div class="insights-grid">
             @for (insight of dashboardData().insights; track insight.type) {
@@ -94,7 +94,7 @@
       <!-- Category Breakdown -->
       @if (dashboardData().categoryBreakdown?.length > 0) {
         <section class="overview-categories">
-          <h2>Spending by Category</h2>
+          <h2>Gastos por categoria</h2>
 
           <div class="categories-list">
             @for (category of dashboardData().categoryBreakdown; track category.name) {
@@ -118,7 +118,7 @@
       <!-- Upcoming Bills -->
       @if (dashboardData().upcomingBills?.length > 0) {
         <section class="overview-bills">
-          <h2>Upcoming Bills</h2>
+          <h2>Próximas contas</h2>
 
           <div class="bills-list">
             @for (bill of dashboardData().upcomingBills; track bill.id) {
@@ -128,7 +128,7 @@
 
                   <p class="bill-date" [class]="'status-' + bill.status.toLowerCase()">
                     {{ bill.dueDate | date: 'MMM dd, yyyy' }}
-                    <span class="bill-status"> ({{ bill.daysUntilDue }} days) </span>
+                    <span class="bill-status"> ({{ formatDaysUntilDue(bill.daysUntilDue) }}) </span>
                   </p>
                 </div>
 
@@ -144,7 +144,7 @@
       <!-- Pots Section -->
       @if (dashboardData().potsStatus?.length > 0) {
         <section class="overview-pots">
-          <h2>Savings Pots</h2>
+          <h2>Cofres</h2>
 
           <div class="pots-list">
             @for (pot of dashboardData().potsStatus; track pot.id) {
@@ -154,7 +154,7 @@
 
                   <div class="pot-title-section">
                     <p class="pot-name">{{ pot.name }}</p>
-                    <p class="pot-status">{{ pot.status.toLowerCase() }}</p>
+                    <p class="pot-status">{{ translatePotStatus(pot.status) }}</p>
                   </div>
                 </div>
 
@@ -168,7 +168,7 @@
 
                 <div class="pot-amounts">
                   <div class="pot-current">
-                    <p class="pot-label">Saved</p>
+                    <p class="pot-label">Guardado</p>
                     <p class="pot-value">
                       {{ pot.currentAmount | currency }}
                     </p>
@@ -177,7 +177,7 @@
                   <div class="pot-divider"></div>
 
                   <div class="pot-target">
-                    <p class="pot-label">Target</p>
+                    <p class="pot-label">Meta</p>
                     <p class="pot-value">
                       {{ pot.targetAmount | currency }}
                     </p>
@@ -185,7 +185,7 @@
                 </div>
 
                 <div class="pot-remaining">
-                  <p class="pot-remaining__label">Remaining</p>
+                  <p class="pot-remaining__label">Falta</p>
                   <p class="pot-remaining__value">
                     {{ pot.remaining | currency }}
                   </p>
@@ -199,24 +199,24 @@
       <!-- Monthly Trend -->
       @if (dashboardData().monthlyTrend?.length > 0) {
         <section class="overview-trend">
-          <h2>6-Month Trend</h2>
+          <h2>Tendência de 6 meses</h2>
 
           <div class="trend-chart">
             @for (month of dashboardData().monthlyTrend; track month.month) {
               <div class="trend-item">
-                <p class="trend-month">{{ month.month }}</p>
+                <p class="trend-month">{{ formatTrendMonth(month.month) }}</p>
 
                 <div class="trend-bars">
                   <div
                     class="trend-bar income"
                     [style.height.px]="((month.income || 0) / 10000) * 100"
-                    [title]="'Income: ' + (month.income | currency)"
+                    [title]="'Receitas: ' + (month.income | currency)"
                   ></div>
 
                   <div
                     class="trend-bar expense"
                     [style.height.px]="((month.expense || 0) / 10000) * 100"
-                    [title]="'Expense: ' + (month.expense | currency)"
+                    [title]="'Despesas: ' + (month.expense | currency)"
                   ></div>
                 </div>
               </div>

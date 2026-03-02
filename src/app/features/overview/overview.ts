@@ -75,6 +75,38 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.changeYear(+value);
   }
 
+  translatePotStatus(status: string): string {
+    const map: Record<string, string> = {
+      STARTING: 'Iniciando',
+      HALF_WAY: 'Metade do caminho',
+      NEAR_GOAL: 'Quase lá',
+      COMPLETED: 'Concluído',
+    };
+
+    return map[status] || status;
+  }
+
+  formatDaysUntilDue(daysUntilDue: number): string {
+    if (daysUntilDue < 0) {
+      const overdueDays = Math.abs(daysUntilDue);
+      return overdueDays === 1 ? '1 dia de atraso' : `${overdueDays} dias de atraso`;
+    }
+
+    if (daysUntilDue === 0) {
+      return 'vence hoje';
+    }
+
+    return daysUntilDue === 1 ? '1 dia' : `${daysUntilDue} dias`;
+  }
+
+  formatTrendMonth(monthKey: string): string {
+    const [year, month] = monthKey.split('-').map(Number);
+    if (!year || !month) return monthKey;
+
+    const date = new Date(year, month - 1, 1);
+    return date.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' });
+  }
+
   // ===== PRIVATE METHODS =====
   private loadDashboard() {
     const userId = this.user()?.uid;
