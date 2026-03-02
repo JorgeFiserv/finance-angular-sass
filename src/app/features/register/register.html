@@ -1,1 +1,54 @@
-<p>register works!</p>
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <img src="assets/images/logo.png" alt="Personal Finance App" class="register-logo" />
+      <p>Comece a gerenciar suas finanças de forma eficiente</p>
+    </div>
+    <form (ngSubmit)="register()" class="register-form">
+      <app-input
+        label="Nome"
+        type="text"
+        [model]="name()"
+        (input)="name.set($any($event.target).value)"
+        placeholder="Seu nome completo"
+        [required]="true"
+      />
+      <app-input
+        label="Email"
+        type="email"
+        [model]="email()"
+        (input)="email.set($any($event.target).value)"
+        placeholder="seu@email.com"
+        [required]="true"
+      />
+      <app-input
+        label="Senha"
+        type="password"
+        [model]="password()"
+        (input)="password.set($any($event.target).value)"
+        placeholder="Sua senha"
+        [required]="true"
+      />
+      <app-input
+        label="Confirme a Senha"
+        type="password"
+        [model]="confirmPassword()"
+        (input)="confirmPassword.set($any($event.target).value)"
+        placeholder="Confirme sua senha"
+        [required]="true"
+      />
+      <app-button
+        [label]="loading() ? 'Criando conta...' : 'Registrar'"
+        variant="primary"
+        [loading]="loading()"
+        (click)="register()"
+      ></app-button>
+    </form>
+    <div class="register-footer">
+      <p class="register-login-text">
+        Já tem uma conta?
+        <a (click)="goToLogin()" class="register-login-link">Entrar</a>
+      </p>
+    </div>
+  </div>
+</div>

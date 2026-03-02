@@ -1,1 +1,147 @@
-<p>budgets works!</p>
+<main class="budget-page">
+  <header class="page-header">
+    <div class="header-left">
+      <h1>Orçamentos</h1>
+    </div>
+
+    <!-- Container unificado com filtros e resumo -->
+    <div class="header-container">
+      <!-- Filtros no topo -->
+      <div class="header-filters">
+        <label>
+          <span>Mês</span>
+          <select (change)="changeMonth(parseNumber($any($event.target).value))">
+            @for (month of months; let i = $index; track i) {
+              <option [value]="i + 1" [selected]="selectedMonth() === i + 1">{{ month }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          <span>Ano</span>
+          <select
+            [value]="selectedYear()"
+            (change)="changeYear(parseNumber($any($event.target).value))"
+          >
+            @for (year of availableYears(); track $index) {
+              <option [value]="year">{{ year }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <!-- Resumo à direita -->
+      <div class="header-summary">
+        <div class="summary-item">
+          <span class="label">Orçamento Total</span>
+          <span class="value income">{{ totalIncome() | currency: 'BRL' }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Despesas Totais</span>
+          <span class="value expense">{{ totalExpense() | currency: 'BRL' }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Restante</span>
+          <span
+            class="value"
+            [ngClass]="{
+              'remaining-positive': remaining() >= 0,
+              'remaining-negative': remaining() < 0,
+            }"
+          >
+            {{ remaining() | currency: 'BRL' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Uso do Orçamento (Topo) -->
+  <section class="budget-progress-top">
+    <div class="progress-header">
+      <span>Uso do Orçamento</span>
+      <span class="progress-percentage">{{ budgetUsedPercentage() }}% utilizado</span>
+    </div>
+    <div class="budget-progress-bar">
+      <div
+        class="budget-progress-fill"
+        [ngClass]="{
+          'usage-low': budgetUsedPercentage() < 50,
+          'usage-medium': budgetUsedPercentage() >= 50 && budgetUsedPercentage() < 80,
+          'usage-high': budgetUsedPercentage() >= 80 && budgetUsedPercentage() < 100,
+          'usage-over': budgetUsedPercentage() >= 100,
+        }"
+        [style.width.%]="budgetUsedPercentage() > 100 ? 100 : budgetUsedPercentage()"
+      ></div>
+    </div>
+  </section>
+
+  <!-- Gráfico e Categorias lado a lado -->
+  <div class="budget-content">
+    <!-- Gráfico em Pizza -->
+    @if (summary().length > 0 && totalExpense() > 0) {
+      <section class="chart-section">
+        <h3>Alocação de Orçamento</h3>
+        <p class="chart-subtitle">Como suas despesas consomem seu orçamento total (renda)</p>
+        <div class="chart-container">
+          <canvas
+            baseChart
+            [type]="'pie'"
+            [data]="pieChartData()"
+            [options]="pieChartOptions"
+          ></canvas>
+        </div>
+        <div class="chart-legend-custom">
+          @for (item of expenseSummary(); let i = $index; track i) {
+            <button
+              class="legend-item"
+              type="button"
+              [class.inactive]="!isCategoryVisible(item.category)"
+              (click)="toggleCategory(item.category)"
+            >
+              <span class="legend-color" [style.backgroundColor]="getCategoryColor(i)"></span>
+              <span class="legend-label">{{ item.category }}</span>
+              @if (isCategoryVisible(item.category)) {
+                <span class="legend-percent">{{ item.percentageOfIncome }}%</span>
+              }
+            </button>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- Categorias -->
+    <section class="categories-section">
+      <h3>Gastos por Categoria</h3>
+      <div class="category-list">
+        @if (summary().length > 0) {
+          @for (item of summary(); let i = $index; track i) {
+            @if (item.expense > 0) {
+              <div class="category-card">
+                <div class="category-header">
+                  <span class="category-name">{{ item.category }}</span>
+                  <div class="category-percentages">
+                    <span class="percentage-badge primary"
+                      >{{ item.percentageOfExpense }}% de gastos</span
+                    >
+                    <span class="percentage-badge secondary"
+                      >{{ item.percentageOfIncome }}% do orçamento</span
+                    >
+                  </div>
+                </div>
+                <div class="category-amount">{{ item.expense | currency: 'BRL' }}</div>
+                <div class="category-bar">
+                  <div class="category-bar-fill" [style.width.%]="item.percentageOfIncome"></div>
+                </div>
+              </div>
+            }
+          }
+        } @else {
+          <div class="empty-state">
+            <p>Nenhuma despesa neste mês. Comece a adicionar transações!</p>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+</main>

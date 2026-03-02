@@ -1,1 +1,38 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <img src="assets/images/logo.png" alt="Personal Finance App" class="login-logo" />
+      <p>Bem-vindo ao sistema de finanças pessoais</p>
+    </div>
+    <form ng-submit="login()" class="login-form">
+      <app-input
+        label="Email"
+        type="email"
+        [model]="email()"
+        (input)="email.set($any($event.target).value)"
+        placeholder="seu@email.com"
+        [required]="true"
+      />
+      <app-input
+        label="Senha"
+        type="password"
+        [model]="password()"
+        (input)="password.set($any($event.target).value)"
+        placeholder="Sua senha"
+        [required]="true"
+      />
+      <app-button
+        [label]="loading() ? 'Carregando...' : 'Entrar'"
+        variant="primary"
+        [loading]="loading()"
+        (click)="login()"
+      ></app-button>
+    </form>
+    <div class="login-footer">
+      <p class="login-register-text">
+        Não tem uma conta?
+        <a class="login-register-link" (click)="goToRegister()">Registra-se</a>
+      </p>
+    </div>
+  </div>
+</div>

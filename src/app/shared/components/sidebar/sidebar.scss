@@ -1,0 +1,138 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background-color: var(--color-bg-sidebar);
+  color: var(--color-text-inverse);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.25s ease;
+  position: relative;
+
+  &.collapsed {
+    width: 72px;
+  }
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px 8px 16px;
+  margin-bottom: 4px;
+}
+
+.sidebar-logo {
+  height: 135px;
+  width: 100%;
+  max-width: 340px;
+  object-fit: contain;
+}
+
+.collapse-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  .material-icons {
+    font-size: 28px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-left: -14px;
+  }
+
+  &:hover {
+    color: var(--color-primary);
+    background-color: var(--color-bg-hover);
+
+    .material-icons {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 12px;
+}
+
+.sidebar-item {
+  all: unset;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  .icon {
+    font-size: 22px;
+    width: 24px;
+    height: 24px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.2s ease;
+  }
+
+  .label {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.2s ease;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+
+    .icon {
+      color: var(--color-primary);
+    }
+    .label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  &.active {
+    background-color: rgba(255, 255, 255, 0.95);
+
+    .icon {
+      color: #1f1f23;
+    }
+
+    .label {
+      color: #1f1f23;
+      font-weight: 600;
+    }
+
+    &:hover {
+      .icon {
+        color: var(--color-primary);
+      }
+      .label {
+        color: #1f1f23;
+      }
+    }
+  }
+}
+
+.sidebar.collapsed {
+  .sidebar-menu {
+    padding: 0 8px;
+  }
+  .sidebar-item {
+    justify-content: center;
+    padding: 12px;
+    .icon {
+      margin: 0;
+    }
+  }
+}

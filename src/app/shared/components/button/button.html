@@ -1,0 +1,13 @@
+<button
+  type="submit"
+  class="button-container {{ variant() }}"
+  [disabled]="disabled() || loading()"
+  (click)="onClick.emit()"
+  [class.loading]="loading()"
+>
+  @if (!loading()) {
+    <span class="button-content">{{ label() }}</span>
+  } @else {
+    <span class="button-loader"></span>
+  }
+</button>

@@ -1,0 +1,67 @@
+@if (isOpen()) {
+  <div class="modal-overlay">
+    <div class="modal">
+      <header class="modal-header">
+        <h2>{{ transaction().id ? 'Editar transação' : 'Nova transação' }}</h2>
+        <button class="icon-btn" (click)="close()" aria-label="Fechar modal">✕</button>
+      </header>
+
+      <form class="modal-body" (submit)="save(); $event.preventDefault()">
+        <label>
+          <span>Tipo</span>
+          <select
+            [value]="transaction().type"
+            (change)="updateField('type', $any($event.target).value)"
+          >
+            <option value="INCOME">Receita</option>
+            <option value="EXPENSE">Despesa</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Valor</span>
+          <input
+            type="text"
+            name="amount"
+            appCurrencyInput
+            [(ngModel)]="transaction().amount"
+            placeholder="R$ 0,00"
+          />
+        </label>
+
+        <label>
+          <span>Categoria</span>
+          <input
+            type="text"
+            [value]="transaction().category"
+            (input)="updateField('category', $any($event.target).value)"
+          />
+        </label>
+
+        <label>
+          <span>Data</span>
+          <input
+            type="date"
+            [value]="formatDate(transaction().date)"
+            (change)="updateField('date', parseDate($any($event.target).value))"
+          />
+        </label>
+
+        <label>
+          <span>Descrição</span>
+          <input
+            type="text"
+            [value]="transaction().description"
+            (input)="updateField('description', $any($event.target).value)"
+          />
+        </label>
+
+        <footer class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="close()">Cancelar</button>
+
+          <button type="submit" class="btn-primary">Salvar</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+}

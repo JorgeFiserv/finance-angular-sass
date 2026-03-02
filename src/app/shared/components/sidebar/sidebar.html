@@ -1,0 +1,23 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+  <div class="sidebar-header">
+    @if (!collapsed) {
+      <img src="assets/images/logo.png" alt="Personal Finance App" class="sidebar-logo" />
+    }
+    <button class="collapse-button" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+      <span class="material-icons">
+        {{ collapsed ? 'chevron_right' : 'chevron_left' }}
+      </span>
+    </button>
+  </div>
+
+  <nav class="sidebar-menu">
+    @for (item of menuItems; track item.route) {
+      <button class="sidebar-item" [class.active]="isActive(item.route)" (click)="goTo(item.route)">
+        <span class="material-icons icon">{{ item.icon }}</span>
+        @if (!collapsed) {
+          <span class="label">{{ item.label }}</span>
+        }
+      </button>
+    }
+  </nav>
+</aside>

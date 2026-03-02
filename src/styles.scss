@@ -1,1 +1,106 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+/* ==================== Variables ==================== */
+:root {
+  /* Base (Dark First — combina com a logo) */
+  --color-bg-main: #f7f5f2;
+  --color-bg-card: #ffffff;
+  --color-bg-sidebar: #1f1f1f;
+
+  /* Brand (extraído da imagem) */
+  --color-primary: #2a7bff; /* Azul principal */
+  --color-primary-glow: #4da3ff; /* Azul luminoso */
+  --color-secondary: #39ff88; /* Verde crescimento */
+  --color-secondary-glow: #7dffb2; /* Verde neon claro */
+
+  /* Accent */
+  --color-accent-cyan: #00e5ff;
+  --color-accent-blue-deep: #1a4fd8;
+
+  /* Text */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #858ea0;
+  --color-text-muted: #7b879c;
+  --color-text-inverse: #05070b;
+  --color-text-toast: #e8edf7;
+  --color-text-strong: #1f1f1f;
+
+  /* Status */
+  --color-success: #68c58e;
+  --color-success-light: #7dffb2;
+
+  --color-danger: #ff4d6d;
+  --color-danger-light: #ff8fa3;
+
+  --color-warning: #ffb020;
+
+  /* Borders */
+  --color-border-light: #1b2436;
+  --color-border-muted: #121a2a;
+  --color-border: #e0e0e0;
+  --color-border-subtle: #e8e8e8;
+  --color-border-soft: #f0f0f0;
+
+  /* Surfaces */
+  --color-white: #ffffff;
+  --color-surface-muted: #f0f0f0;
+  --color-surface-soft: #fbfbfb;
+  --color-surface-header: #faf9f7;
+  --color-surface-hover: #fafafa;
+  --color-surface-footer: #fdfdfd;
+  --color-surface-success-soft: rgba(57, 255, 136, 0.12);
+  --color-surface-danger-soft: rgba(255, 77, 109, 0.12);
+  --color-overlay: rgba(31, 31, 35, 0.7);
+
+  /* UI accents */
+  --color-primary-hover: #1a5fd8;
+  --color-primary-hover-bg: rgba(42, 123, 255, 0.1);
+  --color-icon-muted: #858ea0;
+
+  /* Shadows */
+  --shadow-primary-soft: 0 4px 12px rgba(42, 123, 255, 0.2);
+  --shadow-primary-focus: 0 0 0 3px rgba(42, 123, 255, 0.1);
+  --shadow-secondary-focus: 0 0 0 3px rgba(43, 176, 166, 0.1);
+
+  /* Charts (finance-friendly) */
+  --color-chart-primary: #2a7bff;
+  --color-chart-secondary: #39ff88;
+  --color-chart-negative: #ff4d6d;
+  --color-chart-neutral: #6b7a99;
+
+  /* Glow Effects (diferencial do seu app) */
+  --glow-primary: 0 0 25px rgba(42, 123, 255, 0.6);
+  --glow-secondary: 0 0 25px rgba(57, 255, 136, 0.6);
+
+  /* Shadows */
+  --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --shadow-soft: 0 10px 20px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+.material-icons {
+  font-family: 'Material Icons' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-main);
+}
