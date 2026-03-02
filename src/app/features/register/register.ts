@@ -31,6 +31,8 @@ export class Register {
     private legalConsentProofService: LegalConsentProofService,
   ) {}
   async register() {
+    if (this.loading()) return;
+
     const email = this.email().trim().toLowerCase();
 
     if (!this.name() || !email || !this.password() || !this.confirmPassword()) {
@@ -53,12 +55,18 @@ export class Register {
     try {
       const credential = await firstValueFrom(this.authService.register(email, this.password()));
 
-      await this.legalConsentProofService.recordCoreLegalAcceptance(
-        credential.user.uid,
-        'register_checkbox',
-      );
-
       this.consentService.acceptCurrentPolicy(credential.user.uid);
+
+      try {
+        await this.legalConsentProofService.recordCoreLegalAcceptance(
+          credential.user.uid,
+          'register_checkbox',
+        );
+      } catch (proofError) {
+        console.error('Falha ao salvar prova de consentimento no Firebase:', proofError);
+      }
+
+      await firstValueFrom(this.authService.logout());
       this.toastService.show('Registro bem-sucedido! Faça login para continuar.', 'success');
       this.router.navigate(['login']);
     } catch (error) {

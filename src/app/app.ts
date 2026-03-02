@@ -28,6 +28,8 @@ export class App {
   showCookieBanner = signal(false);
   showPolicyModal = signal(false);
 
+  private readonly publicRoutes = new Set(['/login', '/register', '/privacy', '/terms']);
+
   protected readonly title = signal('finance-angular-sass');
 
   constructor() {
@@ -36,6 +38,11 @@ export class App {
     effect(() => {
       const user = this.user();
       if (!user) {
+        this.showPolicyModal.set(false);
+        return;
+      }
+
+      if (this.publicRoutes.has(this.router.url)) {
         this.showPolicyModal.set(false);
         return;
       }
