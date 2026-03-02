@@ -140,3 +140,13 @@
   [transaction]="selectedTransaction()"
   (onClose)="closeViewModal()"
 ></app-transaction-view-modal>
+
+<app-confirm-modal
+  [isOpen]="isDeleteModalOpen()"
+  title="Excluir transação"
+  message="Tem certeza que deseja excluir esta transação? Esta ação não pode ser desfeita."
+  confirmLabel="Excluir"
+  cancelLabel="Cancelar"
+  (onCancel)="cancelDelete()"
+  (onConfirm)="confirmDelete()"
+></app-confirm-modal>

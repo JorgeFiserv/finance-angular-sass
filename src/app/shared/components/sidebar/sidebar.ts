@@ -1,16 +1,20 @@
 import { Component, signal, inject, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from '../../models/MenuItem.model';
+import { AuthService } from '../../../core/services/auth.service';
+import { ConfirmModal } from '../confirm-modal/confirm-modal';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [],
+  imports: [ConfirmModal],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
 export class Sidebar {
   private router = inject(Router);
+  private authService = inject(AuthService);
+  isLogoutModalOpen = signal(false);
   @Input() collapsed = false;
   @Output() collapsedChange = new EventEmitter<boolean>();
   readonly menuItems: MenuItem[] = [
@@ -40,5 +44,26 @@ export class Sidebar {
   toggleSidebar(): void {
     this.collapsed = !this.collapsed;
     this.collapsedChange.emit(this.collapsed);
+  }
+
+  logout(): void {
+    this.isLogoutModalOpen.set(true);
+  }
+
+  cancelLogout(): void {
+    this.isLogoutModalOpen.set(false);
+  }
+
+  confirmLogout(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.isLogoutModalOpen.set(false);
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Erro ao sair da conta:', err);
+        this.isLogoutModalOpen.set(false);
+      },
+    });
   }
 }

@@ -1,2 +1,48 @@
 <app-toast></app-toast>
+
+@if (showCookieBanner()) {
+  <section class="consent-banner" aria-label="Consentimento LGPD">
+    <div class="consent-banner__content">
+      <p>
+        Usamos cookies essenciais para autenticação e segurança da sua conta. Ao continuar, você
+        aceita nossa Política de Privacidade.
+      </p>
+      <div class="consent-banner__actions">
+        <button type="button" class="btn-link" (click)="openPrivacyPolicy()">
+          Política de Privacidade
+        </button>
+        <button type="button" class="btn-primary" (click)="acceptEssentialCookies()">
+          Aceitar essenciais
+        </button>
+      </div>
+    </div>
+  </section>
+}
+
+@if (showPolicyModal()) {
+  <section class="policy-modal-backdrop" aria-label="Atualização de política">
+    <div class="policy-modal">
+      <h2>Atualização de Política</h2>
+      <p>
+        Atualizamos nossa política de privacidade e termos de uso. Para continuar, confirme seu
+        consentimento.
+      </p>
+      <div class="policy-modal__links">
+        <button type="button" class="btn-link" (click)="openPrivacyPolicy()">
+          Ver Política de Privacidade
+        </button>
+        <button type="button" class="btn-link" (click)="openTerms()">Ver Termos de Uso</button>
+      </div>
+      <div class="policy-modal__actions">
+        <button type="button" class="btn-secondary" (click)="declinePolicyUpdate()">
+          Sair agora
+        </button>
+        <button type="button" class="btn-primary" (click)="acceptPolicyUpdate()">
+          Li e aceito
+        </button>
+      </div>
+    </div>
+  </section>
+}
+
 <router-outlet />

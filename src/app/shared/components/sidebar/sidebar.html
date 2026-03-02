@@ -19,5 +19,22 @@
         }
       </button>
     }
+
+    <button class="sidebar-item sidebar-item--logout" (click)="logout()">
+      <span class="material-icons icon">logout</span>
+      @if (!collapsed) {
+        <span class="label">Sair</span>
+      }
+    </button>
   </nav>
 </aside>
+
+<app-confirm-modal
+  [isOpen]="isLogoutModalOpen()"
+  title="Deseja realmente sair?"
+  message="Ao sair, você será redirecionado para a tela de login."
+  confirmLabel="Sair"
+  cancelLabel="Cancelar"
+  (onCancel)="cancelLogout()"
+  (onConfirm)="confirmLogout()"
+/>

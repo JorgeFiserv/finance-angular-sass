@@ -7,10 +7,11 @@ import { TransactionsFilter } from '../../shared/models/TransactionsFilter.model
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TransactionModal } from '../../shared/components/transaction-modal/transaction-modal';
 import { TransactionViewModal } from '../../shared/components/transaction-view-modal/transaction-view-modal';
+import { ConfirmModal } from '../../shared/components/confirm-modal/confirm-modal';
 
 @Component({
   selector: 'app-transactions',
-  imports: [DatePipe, CurrencyPipe, TransactionModal, TransactionViewModal],
+  imports: [DatePipe, CurrencyPipe, TransactionModal, TransactionViewModal, ConfirmModal],
   templateUrl: './transactions.html',
   styleUrl: './transactions.scss',
 })
@@ -234,14 +235,6 @@ export class TransactionsListComponent implements OnInit, OnDestroy {
 
     this.deleteTarget.set(tx);
     this.isDeleteModalOpen.set(true);
-
-    const confirmed = confirm('Deseja excluir esta transação?');
-
-    if (confirmed) {
-      this.confirmDelete();
-    } else {
-      this.cancelDelete();
-    }
   }
 
   async deleteTransaction(txId: string) {
@@ -269,10 +262,10 @@ export class TransactionsListComponent implements OnInit, OnDestroy {
     try {
       await this.transactionsService.delete(user.uid, target.id);
       this.cancelDelete();
-      alert('Transação excluída');
+      this.toastService.success('Transação excluída.');
     } catch (e) {
       console.error(e);
-      alert('Erro ao excluir');
+      this.toastService.error('Erro ao excluir transação.');
     }
   }
 

@@ -48,6 +48,31 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+
+      .register-consent {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        color: var(--color-text-secondary);
+        font-size: 13px;
+        line-height: 1.45;
+
+        input[type='checkbox'] {
+          width: 16px;
+          height: 16px;
+          margin-top: 2px;
+          accent-color: var(--color-primary);
+        }
+
+        a {
+          color: var(--color-primary);
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
     }
 
     .register-footer {

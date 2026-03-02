@@ -1,0 +1,59 @@
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background-color: var(--color-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.confirm-card {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border-soft);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    color: var(--color-text-strong);
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+}
+
+.confirm-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-secondary,
+.btn-primary {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-strong);
+}
+
+.btn-primary {
+  background-color: var(--color-danger);
+  color: var(--color-text-primary);
+}

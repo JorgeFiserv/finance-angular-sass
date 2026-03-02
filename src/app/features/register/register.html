@@ -37,10 +37,26 @@
         placeholder="Confirme sua senha"
         [required]="true"
       />
+
+      <label class="register-consent">
+        <input
+          type="checkbox"
+          [checked]="acceptedLegal()"
+          (change)="acceptedLegal.set($any($event.target).checked)"
+        />
+        <span>
+          Li e aceito a
+          <a (click)="goToPrivacy()">Política de Privacidade</a>
+          e os
+          <a (click)="goToTerms()">Termos de Uso</a>.
+        </span>
+      </label>
+
       <app-button
         [label]="loading() ? 'Criando conta...' : 'Registrar'"
         variant="primary"
         [loading]="loading()"
+        [disabled]="loading() || !acceptedLegal()"
         (click)="register()"
       ></app-button>
     </form>
