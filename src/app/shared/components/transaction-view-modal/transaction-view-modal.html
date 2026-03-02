@@ -1,0 +1,54 @@
+@if (isOpen() && transaction()) {
+  <div class="modal-overlay">
+    <div class="modal">
+      <header class="modal-header">
+        <div class="header-content">
+          <h2>Detalhes da transação</h2>
+          <span
+            class="type-pill"
+            [ngClass]="{
+              income: transaction()!.type === 'INCOME',
+              expense: transaction()!.type === 'EXPENSE',
+            }"
+          >
+            {{ getTypeLabel(transaction()!.type) }}
+          </span>
+        </div>
+        <button class="icon-btn" (click)="close()" aria-label="Fechar modal">✕</button>
+      </header>
+
+      <div class="modal-body">
+        <div class="detail-row">
+          <span class="label">Valor</span>
+          <span class="value value-number">
+            {{ transaction()!.amount | currency: 'BRL' }}
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Categoria</span>
+          <span class="value">{{ transaction()!.category }}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Data</span>
+          <span class="value value-number">
+            {{
+              (transaction()!.date?.toDate ? transaction()!.date.toDate() : transaction()!.date)
+                | date: 'dd/MM/yyyy'
+            }}
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Descrição</span>
+          <span class="value">{{ transaction()!.description || '-' }}</span>
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="close()">Fechar</button>
+      </footer>
+    </div>
+  </div>
+}

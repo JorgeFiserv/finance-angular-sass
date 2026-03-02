@@ -1,1 +1,232 @@
-<p>recurring-bills works!</p>
+<main class="recurring-bills-page">
+  <header class="page-header">
+    <h1>Contas Recorrentes</h1>
+    <button class="btn-primary" (click)="showForm.set(!showForm())">
+      + Adicionar Conta Recorrente
+    </button>
+  </header>
+  <!--Formulario do conta recorrente-->
+  <div class="bills-summary-section">
+    <div class="summary-stats">
+      <!-- Total Mensal -->
+      <div class="stat-item">
+        <span class="label">Total Mensal:</span>
+        <span class="value total">{{ totalMonthly() | currency: 'BRL' }}</span>
+      </div>
+      <!-- Fatura Ativa -->
+      <div class="stat-item">
+        <span class="label">Active Bills</span>
+        <span class="value active">
+          {{ activeBillsCount() }}
+        </span>
+      </div>
+      <!--Fatura Total-->
+      <div>
+        <span class="label">Total de Contas:</span>
+        <span class="value total">{{ recurringBills().length }}</span>
+      </div>
+    </div>
+  </div>
+
+  @if (showForm()) {
+    <div class="bill-form-section">
+      <div class="form-card">
+        <h2>Nova Conta Recorrente</h2>
+
+        <form (submit)="saveBill(); $event.preventDefault()" class="bill-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nome *</label>
+              <input
+                type="text"
+                name="name"
+                [(ngModel)]="newBill().name"
+                (ngModelChange)="updateName($event)"
+                placeholder="ex: Netflix, Luz"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Valor *</label>
+              <input
+                type="text"
+                name="amount"
+                appCurrencyInput
+                [(ngModel)]="newBill().amount"
+                placeholder="R$ 0,00"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Categoria</label>
+              <select
+                name="category"
+                [(ngModel)]="newBill().category"
+                (ngModelChange)="updateCategory($event)"
+              >
+                <option value="">Selecione uma categoria</option>
+                @for (cat of categories; track cat) {
+                  <option [value]="cat">{{ cat }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Frequência *</label>
+              <select
+                name="frequency"
+                [(ngModel)]="newBill().frequency"
+                (ngModelChange)="updateFrequency($event)"
+                required
+              >
+                <option value="">Selecione a frequência</option>
+                @for (freq of frequencies; track freq) {
+                  <option [value]="freq">{{ freq }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Próximo Vencimento *</label>
+              <input
+                type="date"
+                name="nextDueDate"
+                [value]="formatDateForInput(newBill().nextDueDate)"
+                (change)="updateNextDueDate($any($event.target).value)"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Moeda</label>
+              <input
+                type="text"
+                name="currency"
+                [(ngModel)]="newBill().currency"
+                (ngModelChange)="updateCurrency($event)"
+                placeholder="BRL"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Descrição</label>
+            <textarea
+              name="description"
+              [(ngModel)]="newBill().description"
+              (ngModelChange)="updateDescription($event)"
+              placeholder="Descrição opcional..."
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label>
+              <input
+                type="checkbox"
+                name="autoDebit"
+                [(ngModel)]="newBill().autoDebit"
+                (ngModelChange)="updateAutoDebit($event)"
+              />
+              <span>Débito automático habilitado</span>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="showForm.set(false)">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary" [disabled]="loading()">
+              {{ loading() ? 'Salvando...' : 'Salvar Conta' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- Bills List -->
+  <section class="bills-list">
+    @if (recurringBills().length > 0) {
+      <div class="bills-grid">
+        @for (bill of recurringBills(); track bill.id) {
+          <article class="bill-card" [class.inactive]="!bill.isActive">
+            <div class="bill-header">
+              <div class="bill-title">
+                <h3>{{ bill.name }}</h3>
+                <span class="bill-frequency">{{ bill.frequency }}</span>
+              </div>
+              <button
+                class="btn-icon-delete"
+                (click)="deleteBill(bill.id!)"
+                aria-label="Deletar conta"
+              >
+                <i class="material-icons">delete</i>
+              </button>
+            </div>
+
+            <div class="bill-info">
+              <div class="info-item">
+                <span class="label">Valor</span>
+                <span class="value amount">{{ bill.amount | currency: 'BRL' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Categoria</span>
+                <span class="value">{{ bill.category || 'N/A' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Próximo Vencimento</span>
+                <span class="value due-date">
+                  {{ getDateValue(bill.nextDueDate) | date: 'dd/MM/yyyy' }}
+                </span>
+              </div>
+            </div>
+
+            @if (bill.description) {
+              <div class="bill-description">
+                <p>{{ bill.description }}</p>
+              </div>
+            }
+
+            <div class="bill-footer">
+              <div class="bill-status">
+                <span
+                  class="status-badge"
+                  [class.active]="bill.isActive"
+                  [class.inactive]="!bill.isActive"
+                >
+                  {{ bill.isActive ? 'Ativa' : 'Inativa' }}
+                </span>
+                @if (bill.autoDebit) {
+                  <span class="auto-debit-badge">
+                    <i class="material-icons">autorenew</i> Débito automático
+                  </span>
+                }
+              </div>
+              <button class="btn-toggle" (click)="toggleActive(bill)">
+                {{ bill.isActive ? 'Desativar' : 'Ativar' }}
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <!-- Empty State -->
+      <div class="empty-state">
+        <i class="material-icons">receipt_long</i>
+        <h3>Nenhuma conta recorrente ainda</h3>
+        <p>
+          Comece adicionando sua primeira conta recorrente como assinaturas, contas de serviços ou
+          aluguel.
+        </p>
+        <button class="btn-primary" (click)="showForm.set(true)">+ Adicionar Primeira Conta</button>
+      </div>
+    }
+  </section>
+</main>

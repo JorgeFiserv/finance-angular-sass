@@ -1,0 +1,28 @@
+<div class="app-layout" [class.sidebar-collapsed]="isSidebarCollapsed()">
+  <!-- Botão Mobile -->
+  <button class="mobile-menu-btn" (click)="toggleSidebar()" aria-label="Toggle menu">
+    <span class="hamburger"></span>
+    <span class="hamburger"></span>
+    <span class="hamburger"></span>
+  </button>
+
+  <!-- Overlay Mobile -->
+  @if (isSidebarOpen()) {
+    <div class="sidebar-overlay" (click)="closeSidebar()"></div>
+  }
+
+  <!-- Sidebar -->
+  <app-sidebar
+    class="app-sidebar"
+    [class.open]="isSidebarOpen()"
+    [collapsed]="isSidebarCollapsed()"
+    (collapsedChange)="onSidebarCollapseChange($event)"
+  ></app-sidebar>
+
+  <!-- Conteúdo -->
+  <div class="app-content">
+    <main class="app-main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

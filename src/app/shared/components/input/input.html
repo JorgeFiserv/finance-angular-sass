@@ -1,0 +1,29 @@
+<div class="app-input">
+  <label class="input-label">
+    {{ label }}
+    @if (required) {
+      <span>*</span>
+    }
+  </label>
+  <div class="input-wrapper">
+    <input
+      [type]="inputType()"
+      [value]="model"
+      [placeholder]="placeholder"
+      (input)="model = $any($event.target).value"
+      [required]="required"
+    />
+    @if (isPasswordField()) {
+      <button type="button" (click)="togglePasswordVisibility()" class="toggle-password">
+        <span class="material-icons">
+          {{ showPassword() ? 'visibility_off' : 'visibility' }}
+        </span>
+      </button>
+    }
+  </div>
+  @if (error) {
+    <div class="input-error">
+      {{ error }}
+    </div>
+  }
+</div>

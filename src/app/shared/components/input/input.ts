@@ -1,0 +1,26 @@
+import { Component, Input, signal, computed } from '@angular/core';
+
+@Component({
+  selector: 'app-input',
+  imports: [],
+  templateUrl: './input.html',
+  styleUrl: './input.scss',
+})
+export class InputComponent {
+  @Input() label: string = '';
+  @Input() type: string = 'text';
+  @Input() placeholder = '';
+  @Input() required: boolean = false;
+  @Input() error: string | null = null;
+  @Input() model: string = '';
+  showPassword = signal(false);
+
+  inputType = computed(() => {
+    return this.type === 'password' ? (this.showPassword() ? 'text' : 'password') : this.type;
+  });
+
+  togglePasswordVisibility() {
+    this.showPassword.set(!this.showPassword());
+  }
+  isPasswordField = computed(() => this.type === 'password');
+}
