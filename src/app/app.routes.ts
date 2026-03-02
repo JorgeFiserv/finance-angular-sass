@@ -9,6 +9,14 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'privacy',
+    loadComponent: () => import('./features/legal/privacy/privacy').then((m) => m.Privacy),
+  },
+  {
+    path: 'terms',
+    loadComponent: () => import('./features/legal/terms/terms').then((m) => m.Terms),
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/login/login').then((m) => m.Login),
   },

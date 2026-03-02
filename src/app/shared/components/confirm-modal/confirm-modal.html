@@ -1,1 +1,17 @@
-<p>confirm-modal works!</p>
+@if (isOpen()) {
+  <div class="confirm-overlay" (click)="onCancel.emit()">
+    <div class="confirm-card" (click)="$event.stopPropagation()">
+      <h3>{{ title() }}</h3>
+      <p>{{ message() }}</p>
+
+      <div class="confirm-actions">
+        <button type="button" class="btn-secondary" (click)="onCancel.emit()">
+          {{ cancelLabel() }}
+        </button>
+        <button type="button" class="btn-primary" (click)="onConfirm.emit()">
+          {{ confirmLabel() }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

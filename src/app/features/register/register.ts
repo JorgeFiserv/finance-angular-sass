@@ -5,6 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { InputComponent } from '../../shared/components/input/input';
 import { Button } from '../../shared/components/button/button';
 import { ToastService } from '../../core/services/toast.service';
+import { firstValueFrom } from 'rxjs';
+import { ConsentService } from '../../core/services/consent.service';
+import { LegalConsentProofService } from '../../core/services/legal-consent-proof.service';
 
 @Component({
   selector: 'app-register',
@@ -17,12 +20,15 @@ export class Register {
   email = signal('');
   password = signal('');
   confirmPassword = signal('');
+  acceptedLegal = signal(false);
   loading = signal(false);
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private toastService: ToastService,
+    private consentService: ConsentService,
+    private legalConsentProofService: LegalConsentProofService,
   ) {}
   async register() {
     if (!this.name() || !this.email() || !this.password() || !this.confirmPassword()) {
@@ -33,9 +39,26 @@ export class Register {
       this.toastService.show('As senhas não coincidem.', 'error');
       return;
     }
+    if (!this.acceptedLegal()) {
+      this.toastService.show(
+        'Você precisa aceitar a Política de Privacidade e os Termos.',
+        'error',
+      );
+      return;
+    }
+
     this.loading.set(true);
     try {
-      await this.authService.register(this.email(), this.password());
+      const credential = await firstValueFrom(
+        this.authService.register(this.email(), this.password()),
+      );
+
+      await this.legalConsentProofService.recordCoreLegalAcceptance(
+        credential.user.uid,
+        'register_checkbox',
+      );
+
+      this.consentService.acceptCurrentPolicy(credential.user.uid);
       this.toastService.show('Registro bem-sucedido! Faça login para continuar.', 'success');
       this.router.navigate(['login']);
     } catch (error) {
@@ -47,5 +70,13 @@ export class Register {
   }
   goToLogin() {
     this.router.navigate(['login']);
+  }
+
+  goToPrivacy() {
+    this.router.navigate(['privacy']);
+  }
+
+  goToTerms() {
+    this.router.navigate(['terms']);
   }
 }

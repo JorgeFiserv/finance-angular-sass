@@ -1,0 +1,126 @@
+.consent-banner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1200;
+
+  &__content {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border-soft);
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    p {
+      color: var(--color-text-secondary);
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+}
+
+.policy-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  background-color: var(--color-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.policy-modal {
+  width: 100%;
+  max-width: 520px;
+  background-color: var(--color-bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+
+  h2 {
+    font-size: 22px;
+    margin: 0 0 8px;
+    color: var(--color-text-strong);
+  }
+
+  p {
+    margin: 0 0 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-link {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
+}
+
+.btn-secondary {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-strong);
+}
+
+.btn-link {
+  background: none;
+  color: var(--color-primary);
+  text-decoration: underline;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .consent-banner {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+
+    &__content {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &__actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}
