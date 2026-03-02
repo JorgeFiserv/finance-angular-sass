@@ -31,7 +31,9 @@ export class Register {
     private legalConsentProofService: LegalConsentProofService,
   ) {}
   async register() {
-    if (!this.name() || !this.email() || !this.password() || !this.confirmPassword()) {
+    const email = this.email().trim().toLowerCase();
+
+    if (!this.name() || !email || !this.password() || !this.confirmPassword()) {
       this.toastService.show('Por favor, preencha todos os campos.', 'error');
       return;
     }
@@ -49,9 +51,7 @@ export class Register {
 
     this.loading.set(true);
     try {
-      const credential = await firstValueFrom(
-        this.authService.register(this.email(), this.password()),
-      );
+      const credential = await firstValueFrom(this.authService.register(email, this.password()));
 
       await this.legalConsentProofService.recordCoreLegalAcceptance(
         credential.user.uid,
@@ -62,12 +62,32 @@ export class Register {
       this.toastService.show('Registro bem-sucedido! Faça login para continuar.', 'success');
       this.router.navigate(['login']);
     } catch (error) {
-      this.toastService.show('Erro ao registrar: ' + (error as Error).message, 'error');
+      this.toastService.show(this.getRegisterErrorMessage(error), 'error');
       return;
     } finally {
       this.loading.set(false);
     }
   }
+
+  private getRegisterErrorMessage(error: any): string {
+    const errorCode = error?.code || '';
+
+    switch (errorCode) {
+      case 'auth/email-already-in-use':
+        return 'Este email já está cadastrado. Faça login ou use outro email.';
+      case 'auth/invalid-email':
+        return 'Email inválido.';
+      case 'auth/weak-password':
+        return 'Senha muito fraca. Use pelo menos 6 caracteres.';
+      case 'auth/network-request-failed':
+        return 'Erro de conexão. Verifique sua internet.';
+      case 'auth/too-many-requests':
+        return 'Muitas tentativas. Tente novamente mais tarde.';
+      default:
+        return 'Erro ao registrar. Tente novamente.';
+    }
+  }
+
   goToLogin() {
     this.router.navigate(['login']);
   }

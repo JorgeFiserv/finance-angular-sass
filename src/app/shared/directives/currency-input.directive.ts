@@ -12,8 +12,9 @@ export class CurrencyInputDirective implements OnInit {
   ngOnInit() {
     // Formata o valor inicial se existir
     const initialValue = this.ngControl?.value;
-    if (initialValue !== null && initialValue !== undefined && initialValue !== '') {
-      this.formatValue(initialValue);
+    const normalized = this.toNumber(initialValue);
+    if (normalized !== null) {
+      this.formatValue(normalized);
     }
   }
 
@@ -45,8 +46,10 @@ export class CurrencyInputDirective implements OnInit {
   @HostListener('blur')
   onBlur() {
     const value = this.ngControl?.value;
-    if (value !== null && value !== undefined && value !== '') {
-      this.formatValue(value);
+    const normalized = this.toNumber(value);
+    if (normalized !== null) {
+      this.updateModel(normalized);
+      this.formatValue(normalized);
     }
   }
 
@@ -55,8 +58,9 @@ export class CurrencyInputDirective implements OnInit {
     const input = this.el.nativeElement;
     // Remove a formatação ao focar para facilitar edição
     const value = this.ngControl?.value;
-    if (value !== null && value !== undefined && value !== '') {
-      input.value = this.formatNumber(value);
+    const normalized = this.toNumber(value);
+    if (normalized !== null) {
+      input.value = this.formatNumber(normalized);
     }
   }
 
@@ -77,6 +81,27 @@ export class CurrencyInputDirective implements OnInit {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value);
+  }
+
+  private toNumber(value: unknown): number | null {
+    if (value === null || value === undefined || value === '') return null;
+
+    if (typeof value === 'number') {
+      return Number.isFinite(value) ? value : null;
+    }
+
+    if (typeof value === 'string') {
+      const cleaned = value
+        .replace(/\s/g, '')
+        .replace(/R\$/g, '')
+        .replace(/\./g, '')
+        .replace(',', '.');
+
+      const parsed = Number(cleaned.replace(/[^0-9.-]/g, ''));
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+
+    return null;
   }
 
   private updateModel(value: number | null) {
