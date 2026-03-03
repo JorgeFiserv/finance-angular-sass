@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
+import { SubscriptionGuard } from './core/guards/subscription.guard';
 import { Layout } from './shared/components/layout/layout';
 
 export const routes: Routes = [
@@ -30,25 +31,34 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
+        path: 'billing',
+        loadComponent: () => import('./features/billing/billing').then((m) => m.Billing),
+      },
+      {
         path: 'overview',
+        canActivate: [SubscriptionGuard],
         loadComponent: () =>
           import('./features/overview/overview').then((m) => m.OverviewComponent),
       },
       {
         path: 'transactions',
+        canActivate: [SubscriptionGuard],
         loadComponent: () =>
           import('./features/transactions/transactions').then((m) => m.TransactionsListComponent),
       },
       {
         path: 'budgets',
+        canActivate: [SubscriptionGuard],
         loadComponent: () => import('./features/budgets/budgets').then((m) => m.Budgets),
       },
       {
         path: 'pots',
+        canActivate: [SubscriptionGuard],
         loadComponent: () => import('./features/pots/pots').then((m) => m.PotsComponent),
       },
       {
         path: 'recurring-bills',
+        canActivate: [SubscriptionGuard],
         loadComponent: () =>
           import('./features/recurring-bills/recurring-bills').then((m) => m.RecurringBills),
       },

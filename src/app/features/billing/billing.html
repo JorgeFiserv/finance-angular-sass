@@ -1,0 +1,49 @@
+<section class="billing-page">
+  <div class="billing-card">
+    <p class="billing-eyebrow">Pagamento único via PIX</p>
+    <h1>Ative seu acesso</h1>
+    <p class="billing-price">R$ 19<span> pagamento único</span></p>
+
+    <div class="billing-qr">
+      <img [src]="qrImagePath" alt="QR Code de pagamento PIX" class="billing-qr__image" />
+    </div>
+
+    <div class="billing-pix-key">
+      <p>Chave PIX:</p>
+      <strong>{{ getPixKey() }}</strong>
+      <button type="button" class="billing-button billing-button--secondary" (click)="copyPixKey()">
+        {{ copying() ? 'Copiando...' : 'Copiar chave PIX' }}
+      </button>
+    </div>
+
+    @if (paymentConfirmed()) {
+      <p class="billing-status billing-status--ok">Pagamento validado. Acesso liberado.</p>
+      <button type="button" class="billing-button" (click)="goToApp()">Ir para o app</button>
+    } @else {
+      <p class="billing-status">Após pagar, clique no botão para solicitar a liberação.</p>
+      <div class="billing-actions">
+        <button
+          type="button"
+          class="billing-button"
+          [disabled]="requestingReview()"
+          (click)="confirmPixPayment()"
+        >
+          {{ requestingReview() ? 'Enviando...' : 'Já paguei via PIX' }}
+        </button>
+        <button
+          type="button"
+          class="billing-button billing-button--secondary"
+          (click)="refreshAccessStatus()"
+        >
+          Atualizar status
+        </button>
+      </div>
+    }
+
+    <ul class="billing-list">
+      <li>Acesso completo ao sistema</li>
+      <li>Cofres e contas recorrentes completos</li>
+      <li>Ativação rápida após confirmação</li>
+    </ul>
+  </div>
+</section>

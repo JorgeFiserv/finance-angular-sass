@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { auth } from '../../core/config/firebase.config';
 
 @Component({
   selector: 'app-landing',
@@ -70,6 +71,17 @@ export class Landing implements OnInit, OnDestroy {
 
   goToRegister() {
     this.closeMenu();
+    this.router.navigate(['/app/register']);
+  }
+
+  goToBillingOrRegister() {
+    this.closeMenu();
+
+    if (auth.currentUser) {
+      this.router.navigate(['/app/billing']);
+      return;
+    }
+
     this.router.navigate(['/app/register']);
   }
 

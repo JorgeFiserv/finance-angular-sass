@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { InputComponent } from '../../shared/components/input/input';
@@ -8,6 +8,8 @@ import { ToastService } from '../../core/services/toast.service';
 import { firstValueFrom } from 'rxjs';
 import { ConsentService } from '../../core/services/consent.service';
 import { LegalConsentProofService } from '../../core/services/legal-consent-proof.service';
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { firestore } from '../../core/config/firebase.config';
 
 @Component({
   selector: 'app-register',
@@ -22,6 +24,7 @@ export class Register {
   confirmPassword = signal('');
   acceptedLegal = signal(false);
   loading = signal(false);
+  private returnUrl = '/app/billing';
 
   constructor(
     private authService: AuthService,
@@ -29,7 +32,14 @@ export class Register {
     private toastService: ToastService,
     private consentService: ConsentService,
     private legalConsentProofService: LegalConsentProofService,
-  ) {}
+    private route: ActivatedRoute,
+  ) {
+    const requestedReturnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+
+    if (requestedReturnUrl && requestedReturnUrl.startsWith('/')) {
+      this.returnUrl = requestedReturnUrl;
+    }
+  }
   async register() {
     if (this.loading()) return;
 
@@ -55,6 +65,20 @@ export class Register {
     try {
       const credential = await firstValueFrom(this.authService.register(email, this.password()));
 
+      await setDoc(
+        doc(firestore, `users/${credential.user.uid}`),
+        {
+          uid: credential.user.uid,
+          email,
+          name: this.name().trim(),
+          pixAccessGranted: false,
+          pixPaymentRequested: false,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        },
+        { merge: true },
+      );
+
       this.consentService.acceptCurrentPolicy(credential.user.uid);
 
       try {
@@ -66,9 +90,8 @@ export class Register {
         console.error('Falha ao salvar prova de consentimento no Firebase:', proofError);
       }
 
-      await firstValueFrom(this.authService.logout());
-      this.toastService.show('Registro bem-sucedido! Faça login para continuar.', 'success');
-      this.router.navigate(['/app/login']);
+      this.toastService.show('Registro bem-sucedido!', 'success');
+      this.router.navigateByUrl(this.returnUrl);
     } catch (error) {
       this.toastService.show(this.getRegisterErrorMessage(error), 'error');
       return;
@@ -97,7 +120,9 @@ export class Register {
   }
 
   goToLogin() {
-    this.router.navigate(['/app/login']);
+    this.router.navigate(['/app/login'], {
+      queryParams: { returnUrl: this.returnUrl },
+    });
   }
 
   goToPrivacy() {
