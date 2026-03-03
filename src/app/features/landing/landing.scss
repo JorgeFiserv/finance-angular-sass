@@ -650,6 +650,7 @@
     display: flex;
     gap: 6px;
 
+    a,
     button {
       border: none;
       background: none;
@@ -658,6 +659,7 @@
       cursor: pointer;
       border-radius: 6px;
       padding: 6px 8px;
+      text-decoration: none;
 
       &:hover {
         color: var(--color-text-strong);
