@@ -6,6 +6,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CurrencyInputDirective } from '../../shared/directives/currency-input.directive';
+import { Frequency } from '../../shared/models/RecurringBill.model';
 
 @Component({
   selector: 'app-recurring-bills',
@@ -35,7 +36,12 @@ export class RecurringBills implements OnDestroy {
     currency: 'BRL',
   });
 
-  frequencies = ['DIÁRIA', 'SEMANAL', 'MENSAL', 'ANUAL'];
+  frequencyOptions: Array<{ label: string; value: Frequency }> = [
+    { label: 'Diária', value: 'DAILY' },
+    { label: 'Semanal', value: 'WEEKLY' },
+    { label: 'Mensal', value: 'MONTHLY' },
+    { label: 'Anual', value: 'YEARLY' },
+  ];
   categories = ['Casa', 'Carro', 'Esportes', 'Seguro', 'Outro'];
 
   //derived state
@@ -62,8 +68,23 @@ export class RecurringBills implements OnDestroy {
     this.newBill.update((bill) => ({ ...bill, category: value }));
   }
 
-  updateFrequency(value: string) {
-    this.newBill.update((bill) => ({ ...bill, frequency: value as any }));
+  updateFrequency(value: Frequency) {
+    this.newBill.update((bill) => ({ ...bill, frequency: value }));
+  }
+
+  getFrequencyLabel(frequency: string) {
+    const labels: Record<string, string> = {
+      DAILY: 'Diária',
+      WEEKLY: 'Semanal',
+      MONTHLY: 'Mensal',
+      YEARLY: 'Anual',
+      DIÁRIA: 'Diária',
+      SEMANAL: 'Semanal',
+      MENSAL: 'Mensal',
+      ANUAL: 'Anual',
+    };
+
+    return labels[frequency] || frequency;
   }
 
   updateNextDueDate(value: string) {

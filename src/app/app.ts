@@ -28,7 +28,7 @@ export class App {
   showCookieBanner = signal(false);
   showPolicyModal = signal(false);
 
-  private readonly publicRoutes = new Set(['/login', '/register', '/privacy', '/terms']);
+  private readonly publicRoutes = ['/app/login', '/app/register', '/privacy', '/terms'];
 
   protected readonly title = signal('finance-angular-sass');
 
@@ -42,7 +42,10 @@ export class App {
         return;
       }
 
-      if (this.publicRoutes.has(this.router.url)) {
+      if (
+        this.router.url === '/' ||
+        this.publicRoutes.some((route) => this.router.url.startsWith(route))
+      ) {
         this.showPolicyModal.set(false);
         return;
       }
@@ -103,6 +106,6 @@ export class App {
   async declinePolicyUpdate() {
     await firstValueFrom(this.authService.logout());
     this.showPolicyModal.set(false);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/app/login']);
   }
 }

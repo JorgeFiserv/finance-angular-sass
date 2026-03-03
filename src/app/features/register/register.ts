@@ -68,7 +68,7 @@ export class Register {
 
       await firstValueFrom(this.authService.logout());
       this.toastService.show('Registro bem-sucedido! Faça login para continuar.', 'success');
-      this.router.navigate(['login']);
+      this.router.navigate(['/app/login']);
     } catch (error) {
       this.toastService.show(this.getRegisterErrorMessage(error), 'error');
       return;
@@ -97,7 +97,7 @@ export class Register {
   }
 
   goToLogin() {
-    this.router.navigate(['login']);
+    this.router.navigate(['/app/login']);
   }
 
   goToPrivacy() {

@@ -84,8 +84,8 @@
                 required
               >
                 <option value="">Selecione a frequência</option>
-                @for (freq of frequencies; track freq) {
-                  <option [value]="freq">{{ freq }}</option>
+                @for (freq of frequencyOptions; track freq.value) {
+                  <option [value]="freq.value">{{ freq.label }}</option>
                 }
               </select>
             </div>
@@ -160,7 +160,7 @@
             <div class="bill-header">
               <div class="bill-title">
                 <h3>{{ bill.name }}</h3>
-                <span class="bill-frequency">{{ bill.frequency }}</span>
+                <span class="bill-frequency">{{ getFrequencyLabel(bill.frequency) }}</span>
               </div>
               <button
                 class="btn-icon-delete"

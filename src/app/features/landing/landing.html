@@ -1,0 +1,249 @@
+<header class="landing-header">
+  <div class="landing-header__inner">
+    <button type="button" class="landing-header__brand" (click)="closeMenu()" aria-label="Início">
+      <img src="assets/images/logo.png" alt="Dinway" class="landing-header__logo" />
+    </button>
+
+    <div class="landing-header__actions">
+      <button type="button" class="btn-text btn-login" (click)="goToLogin()">
+        <span class="material-icons">door_front</span>
+        Entrar
+      </button>
+      <button type="button" class="btn-primary" (click)="goToRegister()">Criar conta</button>
+    </div>
+
+    <button
+      type="button"
+      class="landing-header__menu-btn"
+      (click)="toggleMenu()"
+      aria-label="Abrir menu"
+    >
+      <span class="material-icons">{{ menuOpen() ? 'close' : 'menu' }}</span>
+    </button>
+  </div>
+
+  @if (menuOpen()) {
+    <div class="landing-header__mobile" aria-label="Menu mobile">
+      <button
+        type="button"
+        class="landing-header__mobile-link"
+        (click)="scrollToSection('recursos')"
+      >
+        Recursos
+      </button>
+      <button
+        type="button"
+        class="landing-header__mobile-link"
+        (click)="scrollToSection('seguranca')"
+      >
+        Segurança
+      </button>
+      <button type="button" class="landing-header__mobile-link" (click)="scrollToSection('precos')">
+        Preços
+      </button>
+
+      <div class="landing-header__mobile-actions">
+        <button type="button" class="btn-text btn-login" (click)="goToLogin()">
+          <span class="material-icons">door_front</span>
+          Entrar
+        </button>
+        <button type="button" class="btn-primary" (click)="goToRegister()">Criar conta</button>
+      </div>
+    </div>
+  }
+</header>
+
+<section class="landing-hero" aria-label="Apresentação do produto">
+  <div class="landing-hero__inner">
+    <div class="landing-hero__content">
+      <p class="landing-hero__eyebrow">Gestão financeira pessoal</p>
+      <h1 class="landing-hero__title">Organize sua vida financeira com clareza e controle</h1>
+      <p class="landing-hero__description">
+        A Dinway reúne orçamento, transações e planejamento em uma experiência simples para você
+        acompanhar seu dinheiro com segurança no dia a dia.
+      </p>
+
+      <div class="landing-hero__actions">
+        <button type="button" class="btn-primary" (click)="goToRegister()">Começar grátis</button>
+        <button type="button" class="landing-hero__secondary" (click)="goToLogin()">
+          Já tenho conta
+        </button>
+      </div>
+    </div>
+
+    <div class="landing-hero__media">
+      <img [src]="currentSlide().src" [alt]="currentSlide().alt" class="landing-hero__image" />
+
+      <div class="landing-hero__dots" aria-label="Troca de imagem">
+        @for (slide of heroSlides; track slide.src; let index = $index) {
+          <button
+            type="button"
+            class="landing-hero__dot"
+            [class.landing-hero__dot--active]="index === currentSlideIndex()"
+            (click)="setSlide(index)"
+            [attr.aria-label]="'Mostrar imagem ' + (index + 1)"
+          ></button>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="landing-section landing-features" id="recursos" aria-label="Recursos principais">
+  <div class="landing-section__inner">
+    <p class="landing-section__eyebrow">Recursos que simplificam seu dia</p>
+    <h2 class="landing-section__title">Tudo que você precisa para ter clareza financeira</h2>
+
+    <div class="landing-features__grid">
+      <article class="landing-features__card">
+        <i class="material-icons">monitoring</i>
+        <h3>Visão em tempo real</h3>
+        <p>Acompanhe entradas, saídas e saldo com uma leitura objetiva em segundos.</p>
+      </article>
+
+      <article class="landing-features__card">
+        <i class="material-icons">account_balance_wallet</i>
+        <h3>Controle por metas</h3>
+        <p>Crie cofres e objetivos para direcionar seu dinheiro com intenção.</p>
+      </article>
+
+      <article class="landing-features__card">
+        <i class="material-icons">autorenew</i>
+        <h3>Recorrências inteligentes</h3>
+        <p>Automatize contas recorrentes e evite surpresas no fim do mês.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section
+  class="landing-section landing-security"
+  id="seguranca"
+  aria-label="Segurança da plataforma"
+>
+  <div class="landing-section__inner landing-security__inner">
+    <div class="landing-security__content">
+      <p class="landing-section__eyebrow">Segurança em primeiro lugar</p>
+      <h2 class="landing-section__title">Sua informação financeira tratada com responsabilidade</h2>
+      <ul class="landing-security__list">
+        <li>Autenticação segura e proteção de acesso por usuário.</li>
+        <li>Dados organizados por conta com isolamento de informações.</li>
+        <li>Fluxo de consentimento LGPD integrado à experiência.</li>
+      </ul>
+    </div>
+
+    <div class="landing-security__badges">
+      <span class="landing-security__badge">LGPD Ready</span>
+      <span class="landing-security__badge">Auth Seguro</span>
+      <span class="landing-security__badge">Dados Estruturados</span>
+    </div>
+  </div>
+</section>
+
+<section class="landing-section landing-pricing" id="precos" aria-label="Planos e preços">
+  <div class="landing-section__inner">
+    <p class="landing-section__eyebrow">Planos transparentes</p>
+    <h2 class="landing-section__title">Plano único, simples e direto</h2>
+
+    <div class="landing-pricing__layout">
+      <div class="landing-pricing__info">
+        <p class="landing-pricing__tag">Sem surpresa no preço</p>
+        <h3>Um plano completo para organizar sua vida financeira</h3>
+        <ul class="landing-pricing__benefits">
+          <li>Todos os recursos liberados desde o primeiro dia</li>
+          <li>Atualizações contínuas sem custo adicional</li>
+          <li>Cancelamento simples quando quiser</li>
+        </ul>
+      </div>
+
+      <article class="landing-pricing__card landing-pricing__card--highlight">
+        <span class="landing-pricing__badge">Plano atual</span>
+        <h3>Dinway</h3>
+        <p class="landing-pricing__price">R$ 19<span>/mês</span></p>
+        <ul>
+          <li>Controle completo de transações e orçamento</li>
+          <li>Cofres, metas e recorrências ilimitadas</li>
+          <li>Visão financeira clara para tomada de decisão</li>
+        </ul>
+        <button type="button" class="btn-primary" (click)="goToRegister()">
+          Assinar por R$ 19
+        </button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="landing-cta" aria-label="Chamada final">
+  <div class="landing-cta__inner">
+    <h2>Comece hoje a organizar seu dinheiro com mais confiança</h2>
+    <p>Crie sua conta em minutos e tenha visão total da sua vida financeira.</p>
+    <div class="landing-cta__actions">
+      <button type="button" class="btn-primary" (click)="goToRegister()">Criar conta grátis</button>
+      <button type="button" class="btn-text" (click)="goToLogin()">Já sou cliente</button>
+    </div>
+  </div>
+</section>
+
+<section class="landing-demo" aria-label="Demonstração do sistema">
+  <div class="landing-demo__inner">
+    <p class="landing-demo__eyebrow">Veja a transformação na prática</p>
+    <h2 class="landing-demo__title">Assuma o controle do seu dinheiro em poucos minutos</h2>
+    <p class="landing-demo__description">
+      Visual simples, decisões mais inteligentes e rotina financeira sem estresse. Tudo em um fluxo
+      pensado para você agir com confiança todos os dias.
+    </p>
+
+    <div class="landing-demo__carousel">
+      <div class="landing-demo__image-wrap" aria-label="Card de demonstração">
+        <button
+          type="button"
+          class="landing-demo__nav-btn landing-demo__nav-btn--prev"
+          (click)="prevDemoSlide()"
+          aria-label="Imagem anterior"
+        >
+          <span class="material-icons">chevron_left</span>
+        </button>
+
+        <img
+          [src]="currentDemoSlide().src"
+          [alt]="currentDemoSlide().alt"
+          class="landing-demo__image"
+        />
+
+        <button
+          type="button"
+          class="landing-demo__nav-btn landing-demo__nav-btn--next"
+          (click)="nextDemoSlideFromUi()"
+          aria-label="Próxima imagem"
+        >
+          <span class="material-icons">chevron_right</span>
+        </button>
+      </div>
+
+      <div class="landing-demo__dots" aria-label="Troca de demonstração">
+        @for (slide of demoSlides; track slide.src; let index = $index) {
+          <button
+            type="button"
+            class="landing-demo__dot"
+            [class.landing-demo__dot--active]="index === currentDemoSlideIndex()"
+            (click)="setDemoSlide(index)"
+            [attr.aria-label]="'Mostrar demonstração ' + (index + 1)"
+          ></button>
+        }
+      </div>
+
+      <p class="landing-demo__counter">
+        {{ currentDemoSlideIndex() + 1 }} de {{ demoSlides.length }}
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="landing-footer">
+  <div class="landing-footer__inner">
+    <p>© {{ 2026 }} Dinway. Todos os direitos reservados.</p>
+    <div class="landing-footer__links">
+      <button type="button" (click)="goToLogin()">Entrar</button>
+    </div>
+  </div>
+</footer>
