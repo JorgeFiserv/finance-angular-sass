@@ -18,11 +18,11 @@ export class Sidebar {
   @Input() collapsed = false;
   @Output() collapsedChange = new EventEmitter<boolean>();
   readonly menuItems: MenuItem[] = [
-    { label: 'Visão geral', icon: 'dashboard', route: '/overview' },
-    { label: 'Transações', icon: 'swap_horiz', route: '/transactions' },
-    { label: 'Orçamentos', icon: 'pie_chart', route: '/budgets' },
-    { label: 'Cofres', icon: 'account_balance_wallet', route: '/pots' },
-    { label: 'Contas Recorrentes', icon: 'repeat', route: '/recurring-bills' },
+    { label: 'Visão geral', icon: 'dashboard', route: '/app/overview' },
+    { label: 'Transações', icon: 'swap_horiz', route: '/app/transactions' },
+    { label: 'Orçamentos', icon: 'pie_chart', route: '/app/budgets' },
+    { label: 'Cofres', icon: 'account_balance_wallet', route: '/app/pots' },
+    { label: 'Contas Recorrentes', icon: 'repeat', route: '/app/recurring-bills' },
   ];
 
   goTo(route: string): void {
@@ -58,7 +58,7 @@ export class Sidebar {
     this.authService.logout().subscribe({
       next: () => {
         this.isLogoutModalOpen.set(false);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/app/login']);
       },
       error: (err) => {
         console.error('Erro ao sair da conta:', err);

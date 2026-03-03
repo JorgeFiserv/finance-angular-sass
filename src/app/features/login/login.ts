@@ -31,7 +31,7 @@ export class Login {
     this.authService.login(this.email(), this.password()).subscribe({
       next: () => {
         this.toastService.show('Login bem-sucedido!', 'success');
-        this.router.navigate(['overview']);
+        this.router.navigate(['/app/overview']);
         this.loading.set(false);
       },
       error: (error) => {
@@ -64,6 +64,6 @@ export class Login {
   }
 
   goToRegister() {
-    this.router.navigate(['register']);
+    this.router.navigate(['/app/register']);
   }
 }

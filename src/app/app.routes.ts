@@ -5,8 +5,7 @@ import { Layout } from './shared/components/layout/layout';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'overview',
-    pathMatch: 'full',
+    loadComponent: () => import('./features/landing/landing').then((m) => m.Landing),
   },
   {
     path: 'privacy',
@@ -17,16 +16,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/legal/terms/terms').then((m) => m.Terms),
   },
   {
-    path: 'login',
+    path: 'app/login',
     loadComponent: () => import('./features/login/login').then((m) => m.Login),
   },
   {
-    path: 'register',
+    path: 'app/register',
     loadComponent: () => import('./features/register/register').then((m) => m.Register),
   },
   // Rotas com layout (área logada)
   {
-    path: '',
+    path: 'app',
     component: Layout,
     canActivate: [AuthGuard],
     children: [
@@ -57,6 +56,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'overview',
+    redirectTo: '',
   },
 ];

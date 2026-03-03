@@ -20,6 +20,30 @@ import { RecurringBill } from '../../shared/models/RecurringBill.model';
 })
 export class RecurringBillsService {
   private firestore = inject(Firestore);
+  private validFrequencies = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'] as const;
+
+  private normalizeFrequency(value?: string) {
+    if (!value) return null;
+
+    const normalized = value
+      .trim()
+      .toUpperCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    const frequencyMap: Record<string, (typeof this.validFrequencies)[number]> = {
+      DAILY: 'DAILY',
+      DIARIA: 'DAILY',
+      WEEKLY: 'WEEKLY',
+      SEMANAL: 'WEEKLY',
+      MONTHLY: 'MONTHLY',
+      MENSAL: 'MONTHLY',
+      YEARLY: 'YEARLY',
+      ANUAL: 'YEARLY',
+    };
+
+    return frequencyMap[normalized] ?? null;
+  }
 
   /* ===== Reference ===== */
 
@@ -61,8 +85,8 @@ export class RecurringBillsService {
       throw new Error('Amount must be greater than 0');
     }
 
-    const validFrequencies = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'];
-    if (!validFrequencies.includes(bill.frequency!)) {
+    const frequency = this.normalizeFrequency(bill.frequency);
+    if (!frequency) {
       throw new Error('Invalid frequency');
     }
 
@@ -77,7 +101,7 @@ export class RecurringBillsService {
       amount,
       currency: bill.currency || 'BRL',
       category: bill.category || 'Uncategorized',
-      frequency: bill.frequency,
+      frequency,
       nextDueDate,
       isActive: true,
       autoDebit: bill.autoDebit || false,
@@ -90,13 +114,18 @@ export class RecurringBillsService {
 
   async update(userId: string, billId: string, bill: Partial<RecurringBill>) {
     const ref = doc(this.firestore, `users/${userId}/recurringBills/${billId}`);
+    const frequency = this.normalizeFrequency(bill.frequency);
+
+    if (!frequency) {
+      throw new Error('Invalid frequency');
+    }
 
     return updateDoc(ref, {
       name: bill.name,
       description: bill.description || '',
       amount: Number(bill.amount),
       category: bill.category,
-      frequency: bill.frequency,
+      frequency,
       nextDueDate: new Date(bill.nextDueDate!),
       isActive: bill.isActive ?? true,
       autoDebit: bill.autoDebit || false,
