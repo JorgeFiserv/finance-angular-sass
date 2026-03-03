@@ -38,7 +38,8 @@ export class SubscriptionGuard implements CanActivate {
 
         return from(getDoc(doc(firestore, `users/${user.uid}`))).pipe(
           map((snapshot) => {
-            const hasPaidAccess = snapshot.exists() && snapshot.data()?.['pixAccessGranted'] === true;
+            const hasPaidAccess =
+              snapshot.exists() && snapshot.data()?.['pixAccessGranted'] === true;
             return hasPaidAccess ? true : this.router.parseUrl('/app/billing');
           }),
         );

@@ -22,10 +22,19 @@
     } @else {
       <p class="billing-status">Após pagar, clique no botão para solicitar a liberação.</p>
       <div class="billing-actions">
-        <button type="button" class="billing-button" [disabled]="requestingReview()" (click)="confirmPixPayment()">
+        <button
+          type="button"
+          class="billing-button"
+          [disabled]="requestingReview()"
+          (click)="confirmPixPayment()"
+        >
           {{ requestingReview() ? 'Enviando...' : 'Já paguei via PIX' }}
         </button>
-        <button type="button" class="billing-button billing-button--secondary" (click)="refreshAccessStatus()">
+        <button
+          type="button"
+          class="billing-button billing-button--secondary"
+          (click)="refreshAccessStatus()"
+        >
           Atualizar status
         </button>
       </div>
