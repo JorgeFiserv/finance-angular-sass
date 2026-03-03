@@ -57,3 +57,49 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Stripe Billing + Firebase Functions
+
+The project now includes backend billing logic in [functions/src/index.ts](functions/src/index.ts):
+
+- Callable `createCheckoutSession` (requires authenticated user)
+- HTTP `stripeWebhook` with signature validation
+- Firestore sync at `users/{uid}/billing/subscription`
+
+### 1) Install and build functions
+
+```bash
+cd functions
+npm install
+npm run build
+```
+
+### 2) Configure Firebase secrets and Stripe price
+
+```bash
+firebase functions:secrets:set STRIPE_SECRET_KEY
+firebase functions:secrets:set STRIPE_WEBHOOK_SECRET
+```
+
+Set `STRIPE_PRICE_ID` as an environment variable for Functions during deploy (or through your Firebase runtime config strategy).
+
+### 3) Deploy functions
+
+```bash
+cd functions
+npm run deploy
+```
+
+### 4) Configure Stripe webhook endpoint
+
+After deploy, register the webhook URL in Stripe Dashboard pointing to `stripeWebhook` and subscribe to:
+
+- `checkout.session.completed`
+- `customer.subscription.created`
+- `customer.subscription.updated`
+- `customer.subscription.deleted`
+
+### 5) Frontend flow
+
+- Route [src/app/features/billing/billing.ts](src/app/features/billing/billing.ts) starts Stripe checkout.
+- Guard [src/app/core/guards/subscription.guard.ts](src/app/core/guards/subscription.guard.ts) blocks premium routes when subscription is not active/trialing.

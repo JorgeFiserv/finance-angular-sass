@@ -18,6 +18,7 @@ export class Sidebar {
   @Input() collapsed = false;
   @Output() collapsedChange = new EventEmitter<boolean>();
   readonly menuItems: MenuItem[] = [
+    { label: 'Pagamento PIX', icon: 'qr_code_2', route: '/app/billing' },
     { label: 'Visão geral', icon: 'dashboard', route: '/app/overview' },
     { label: 'Transações', icon: 'swap_horiz', route: '/app/transactions' },
     { label: 'Orçamentos', icon: 'pie_chart', route: '/app/budgets' },

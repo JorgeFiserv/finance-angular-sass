@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { InputComponent } from '../../shared/components/input/input';
@@ -16,11 +16,20 @@ export class Login {
   email = signal('');
   password = signal('');
   loading = signal(false);
+  private returnUrl = '/app/overview';
+
   constructor(
     private authService: AuthService,
     private router: Router,
     private toastService: ToastService,
-  ) {}
+    private route: ActivatedRoute,
+  ) {
+    const requestedReturnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+
+    if (requestedReturnUrl && requestedReturnUrl.startsWith('/')) {
+      this.returnUrl = requestedReturnUrl;
+    }
+  }
 
   async login() {
     if (!this.email() || !this.password()) {
@@ -31,7 +40,7 @@ export class Login {
     this.authService.login(this.email(), this.password()).subscribe({
       next: () => {
         this.toastService.show('Login bem-sucedido!', 'success');
-        this.router.navigate(['/app/overview']);
+        this.router.navigateByUrl(this.returnUrl);
         this.loading.set(false);
       },
       error: (error) => {
@@ -64,6 +73,8 @@ export class Login {
   }
 
   goToRegister() {
-    this.router.navigate(['/app/register']);
+    this.router.navigate(['/app/register'], {
+      queryParams: { returnUrl: this.returnUrl },
+    });
   }
 }
