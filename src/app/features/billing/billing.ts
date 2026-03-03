@@ -15,7 +15,7 @@ export class Billing {
   private toastService = inject(ToastService);
   private router = inject(Router);
   private readonly pixKey =
-    '00020101021126580014br.gov.bcb.pix0136efc7bd5e-a855-409c-9ccc-891a584b0e8e520400005303986540519.005802BR5913JORGE L ATTIE6009SAO PAULO62070503***6304DEF9';
+    '00020101021126580014br.gov.bcb.pix0136efc7bd5e-a855-409c-9ccc-891a584b0e8e520400005303986540512.905802BR5913JORGE L ATTIE6009SAO PAULO62070503***630438B7';
   readonly qrImagePath = 'assets/images/pix/pix.png';
 
   copying = signal(false);
